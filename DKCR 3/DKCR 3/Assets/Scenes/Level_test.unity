@@ -661,7 +661,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 333b703e54a6a6949bc4d8268334749c, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -678,11 +678,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e9e3a4be8dc7e4ea548b2793a732c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 400
+  Speed: 1
+  Acceleration: 250
+  Decceleration: 500
+  MaxSpeed: 25
   JumpForce: 12
-  DashSpeed: 2000
+  DashSpeed: 1500
   StartDash: 0.3
   DashDelay: 0.4
+  MaxDashSpeed: 200
   fallMultiplier: 2.5
   lowJumpMultiplier: 10
   groundCheck: {fileID: 1627456306}
