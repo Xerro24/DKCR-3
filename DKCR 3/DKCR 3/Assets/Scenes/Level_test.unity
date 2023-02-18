@@ -679,13 +679,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  Acceleration: 250
-  Decceleration: 500
-  MaxSpeed: 25
+  Acceleration: 2.5
+  Decceleration: 10
+  MaxSpeed: 20
   JumpForce: 12
-  DashSpeed: 1500
-  StartDash: 0.3
-  DashDelay: 0.4
+  DashSpeed: 3000
+  StartDash: 0.5
+  DashDelay: 0.6
   MaxDashSpeed: 200
   fallMultiplier: 2.5
   lowJumpMultiplier: 10
