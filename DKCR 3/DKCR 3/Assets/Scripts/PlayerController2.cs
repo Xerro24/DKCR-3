@@ -76,15 +76,15 @@ public class PlayerController2 : MonoBehaviour
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
 
-        // flip sprite based on direction of movement
-        if (horizontalInput > 0)
-        {
-            transform.localScale = new Vector3(1f, 1f, 1f);
-        }
-        else if (horizontalInput < 0)
-        {
-            transform.localScale = new Vector3(-1f, 1f, 1f);
-        }
+        //// flip sprite based on direction of movement
+        //if (horizontalInput > 0)
+        //{
+        //    transform.localScale = new Vector3(1f, 1f, 1f);
+        //}
+        //else if (horizontalInput < 0)
+        //{
+        //    transform.localScale = new Vector3(-1f, 1f, 1f);
+        //}
 
         // update animator variables
         //anim.SetFloat("Speed", Mathf.Abs(horizontalInput));

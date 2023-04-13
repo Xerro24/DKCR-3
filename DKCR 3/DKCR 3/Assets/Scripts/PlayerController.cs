@@ -21,11 +21,15 @@ public class PlayerController : MonoBehaviour
     private bool CanDash = true;
     public float DashDelay = 1f;
     public float MaxDashSpeed = 200f;
+    public bool IsDashing;
+
+
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
     //public string CurrentRoom;
 
+    public bool CanJump = true;
 
     private bool IsGrounded;
     public Transform groundCheck;
@@ -48,9 +52,21 @@ public class PlayerController : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         j = Input.GetButtonDown("Jump");
 
-        if (j && IsGrounded) //IsGrounded does work >~<
+        if (j && CanJump) //IsGrounded does work >~<
         {
-            rb.velocity = new Vector2(rb.velocity.x, JumpForce); 
+            //if (Dashtime > 0)
+            {
+                //Dashtime = 0;
+                //rb.velocity = new Vector2(MaxDashSpeed, JumpForce);
+            }
+            //else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+                CanJump = false;
+            }
+                
+
+
         }
 
         if (FacingRight == false && x > 0)
@@ -62,14 +78,14 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
-        if ((Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.E)) && CanDash == true)
+        if ((Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.E)) && CanDash && IsGrounded)
             StartCoroutine(DashInput());
 
         if (rb.velocity.y < 0)
         {
             rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime));
         }
-        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        else if (rb.velocity.y > 0 && !j)
         {
             rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y + (Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime));
         }
@@ -79,12 +95,24 @@ public class PlayerController : MonoBehaviour
             Application.Quit();
         }
 
+        //print(CanDash);
+
+        if (IsGrounded && rb.velocity.y <= 0)
+            CanJump = true;
+        else if (!IsGrounded && !IsDashing)
+        {
+            CanJump = false;
+        }
+
+
     }
 
 
     void FixedUpdate()
     {
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        
+        
 
         float TargetSpeed = x * MaxSpeed;
 
@@ -100,11 +128,6 @@ public class PlayerController : MonoBehaviour
         //if (rb.velocity.x * rb.velocity.x <= (x * Speed * Time.fixedDeltaTime) * (x * Speed * Time.fixedDeltaTime))
         //    rb.velocity = new Vector2(x * Speed * Time.fixedDeltaTime, rb.velocity.y);
 
-        if (j)
-        {
-            //rb.velocity = Vector2.up * JumpForce;
-        }
-
 
 
 
@@ -117,18 +140,17 @@ public class PlayerController : MonoBehaviour
                 Dashtime = StartDash;
                 //rb.velocity = Vector2.zero;
                 //rb.gravityScale = 2;
-                CanDash = false;
+                //CanDash = false;
             }
             else
             {
                 Dashtime -= Time.deltaTime;
                 //rb.gravityScale = 0;
-                rb.velocity = new Vector2(DashSpeed * Time.deltaTime * Direction, rb.velocity.y);
-                if (j && IsGrounded) 
-                {
-                    Direction = 0;
-                    Dashtime = StartDash;
-                }
+                if (Mathf.Abs(rb.velocity.x) < MaxDashSpeed)
+                    rb.velocity = new Vector2(DashSpeed * Time.deltaTime * Direction, rb.velocity.y);
+                else
+                    rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * MaxDashSpeed, rb.velocity.y);
+                print(rb.velocity.x);
 
 
                 //if (Direction == 1)
@@ -177,7 +199,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Direction == 0)
         {
-            if (FacingRight == true && (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.E)) && CanDash)
+            if (FacingRight == true)
             {
                 Direction = 1;
             }
@@ -186,7 +208,11 @@ public class PlayerController : MonoBehaviour
                 Direction = -1;
             }
         }
+
+        CanDash = false;
+        IsDashing = true;
         yield return new WaitForSeconds(DashDelay);
+        IsDashing = false;
         CanDash = true;
     }
 
