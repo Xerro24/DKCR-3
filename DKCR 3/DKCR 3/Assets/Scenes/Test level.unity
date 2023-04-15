@@ -399,6 +399,7 @@ MonoBehaviour:
   StartDash: 0.2
   DashDelay: 1
   MaxDashSpeed: 15
+  IsDashing: 0
   fallMultiplier: 2.5
   lowJumpMultiplier: 10
   CanJump: 1
@@ -581,6 +582,7 @@ MonoBehaviour:
   StartDash: 0.5
   DashDelay: 0.6
   MaxDashSpeed: 200
+  IsDashing: 0
   fallMultiplier: 2.5
   lowJumpMultiplier: 10
   CanJump: 1
@@ -758,7 +760,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

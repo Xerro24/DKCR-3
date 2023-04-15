@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,7 +37,8 @@ public class PlayerController : MonoBehaviour
     public float checkRadius;
     public LayerMask whatIsGround;
 
-
+    private bool temp;
+    private int tempDir;
 
 
     // Start is called before the first frame update
@@ -63,6 +65,12 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce);
                 CanJump = false;
+                if (IsDashing)
+                {
+                    temp = true;
+                    tempDir = Direction;
+                    //print("y ");
+                }
             }
                 
 
@@ -85,7 +93,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime));
         }
-        else if (rb.velocity.y > 0 && !j)
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y + (Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime));
         }
@@ -93,6 +101,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         //print(CanDash);
@@ -104,7 +116,24 @@ public class PlayerController : MonoBehaviour
             CanJump = false;
         }
 
+        if (temp)
+        {
+            //direction of roll only plz
+            if ((!IsGrounded || rb.velocity.y != 0) && x == tempDir)
+            {
+                print(!IsGrounded +" "+ (rb.velocity.y != 0) +" "+ (x == tempDir));
+                rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * MaxDashSpeed, rb.velocity.y);
+            }
+            else
+            {
+                temp = false;
+            }
 
+        }
+            
+
+        //print(rb.velocity + " " + temp);
+        //print(temp);
     }
 
 
@@ -123,7 +152,10 @@ public class PlayerController : MonoBehaviour
 
         float Movement = Mathf.Pow(Mathf.Abs(SpeedDiff) * AccelRate, Speed) * Mathf.Sign(SpeedDiff);
 
-        rb.AddForce(Movement * Vector2.right);
+        if(IsGrounded)
+            rb.AddForce(Movement * Vector2.right);
+        else
+            rb.AddForce(Movement * Vector2.right / 2);
 
         //if (rb.velocity.x * rb.velocity.x <= (x * Speed * Time.fixedDeltaTime) * (x * Speed * Time.fixedDeltaTime))
         //    rb.velocity = new Vector2(x * Speed * Time.fixedDeltaTime, rb.velocity.y);
@@ -150,7 +182,7 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = new Vector2(DashSpeed * Time.deltaTime * Direction, rb.velocity.y);
                 else
                     rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * MaxDashSpeed, rb.velocity.y);
-                print(rb.velocity.x);
+                
 
 
                 //if (Direction == 1)
