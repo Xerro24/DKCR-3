@@ -396,7 +396,7 @@ MonoBehaviour:
   MaxSpeed: 6
   JumpForce: 12
   DashSpeed: 1250
-  StartDash: 0.2
+  StartDash: 0.4
   DashDelay: 1
   MaxDashSpeed: 15
   IsDashing: 0
