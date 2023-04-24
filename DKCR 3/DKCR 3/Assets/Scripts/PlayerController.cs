@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce);
                 CanJump = false;
-                if (IsDashing && Dashtime > .1)
+                if (IsDashing && Dashtime > 1)
                 {
                     temp = true;
                     tempDir = Direction;
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
 
         if (IsGrounded && rb.velocity.y <= 0)
             CanJump = true;
-        else if (!IsGrounded && !IsDashing)
+        else if (!IsGrounded && Dashtime > 1)
         {
             print("yeah");
             CanJump = false;
