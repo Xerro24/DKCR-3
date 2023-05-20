@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     //public string CurrentRoom;
 
     public bool CanJump = true;
+    public int jumps = 0;
 
     private bool IsGrounded;
     public Transform groundCheck;
@@ -63,8 +64,9 @@ public class PlayerController : MonoBehaviour
             }
             //else
             {
-                rb.velocity = new Vector2(rb.velocity.x, JumpForce);
                 CanJump = false;
+                rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+                jumps--;
                 if (IsDashing && Dashtime > 1)
                 {
                     temp = true;
@@ -109,9 +111,12 @@ public class PlayerController : MonoBehaviour
 
         //print(CanDash);
 
-        if (IsGrounded && rb.velocity.y <= 0)
+        if (IsGrounded && rb.velocity.y == 0)
             CanJump = true;
-        else if (!IsGrounded && Dashtime > 1)
+            //jumps = 1;
+        //CanJump = (jumps > 0) ? true : false;
+
+        else if (!IsGrounded && !IsDashing)
         {
             print("yeah");
             CanJump = false;
@@ -174,6 +179,7 @@ public class PlayerController : MonoBehaviour
                 //rb.velocity = Vector2.zero;
                 //rb.gravityScale = 2;
                 //CanDash = false;
+                jumps = 0;
             }
             else
             {
@@ -183,6 +189,7 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = new Vector2(DashSpeed * Time.deltaTime * Direction, rb.velocity.y);
                 else
                     rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * MaxDashSpeed, rb.velocity.y);
+                jumps = 1;
                 
 
 
@@ -244,7 +251,9 @@ public class PlayerController : MonoBehaviour
 
         CanDash = false;
         IsDashing = true;
+        CanJump = true;
         yield return new WaitForSeconds(DashDelay);
+        CanJump = false;
         IsDashing = false;
         CanDash = true;
     }
