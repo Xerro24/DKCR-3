@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
 
         //print(CanDash);
 
-        if (IsGrounded && rb.velocity.y == 0)
+        if (IsGrounded && (rb.velocity.y * Mathf.Sign(rb.velocity.y)) <= 0.5)
             CanJump = true;
             //jumps = 1;
         //CanJump = (jumps > 0) ? true : false;
